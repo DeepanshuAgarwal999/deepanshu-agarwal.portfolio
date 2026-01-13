@@ -69,7 +69,7 @@ export default function Hero() {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <Link
-              href="https://drive.google.com/file/d/1PGv33DQLl65ZqF7R-GV4tqwNglo83io7/view"
+              href="https://drive.google.com/file/d/1pVz07V4i04OW0TxRnVi5GE5cCMQcng-w/view?usp=sharing"
               download="Deepanshu_Agarwal_Resume.pdf"
               className="btn-secondary inline-flex items-center gap-2"
             >

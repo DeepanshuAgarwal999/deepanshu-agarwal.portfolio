@@ -34,4 +34,5 @@ const PostSchema = new Schema<PostDocument>(
 
 export const Post = models.Post || model<PostDocument>('Post', PostSchema);
 
+export type { PostDocument as IPost };
 export default Post;

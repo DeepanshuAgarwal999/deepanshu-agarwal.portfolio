@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -9,77 +9,163 @@
   }
 
   body {
-    font-family: 'Inter', sans-serif;
-    background: #0F172A;
-    color: #ffffff;
+    font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    background: #F4F3EF;
+    color: #141414;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   }
 }
 
 @theme {
-  /* Professional Blue/Dark Color Palette */
-  --color-slate-950: #020617;
-  --color-slate-900: #0F172A;
-  --color-slate-800: #1E293B;
-  --color-slate-700: #334155;
-  --color-slate-600: #475569;
-  --color-blue-500: #3B82F6;
-  --color-blue-400: #60A5FA;
-  --color-indigo-500: #6366F1;
-  --color-violet-500: #8B5CF6;
-  --color-text-white: #ffffff;
-  --color-text-gray: #CBD5E1;
-  --color-text-muted: #94A3B8;
-  
+  /* Light / teal / lavender palette */
+  --color-page: #F4F3EF;
+  --color-panel: #EEEDE8;
+  --color-panel-light: #F1F0EA;
+  --color-surface: #ffffff;
+  --color-ink: #141414;
+  --color-ink-soft: #262626;
+  --color-muted: #6B6B70;
+  --color-faint: #9A9A9F;
+  --color-line: #E4E2DC;
+  --color-tag: #F1F0ED;
+  --color-teal: #2E9C97;
+  --color-teal-dark: #17615D;
+  --color-teal-tint: #DFF2EF;
+  --color-lavender: #B7A8F5;
+  --color-lavender-tint: #EDE9FD;
+
   /* Typography */
-  --font-body: 'Inter', sans-serif;
-  
-  /* Spacing */
-  --spacing-section: 8rem;
-  --spacing-container: 2rem;
-  
-  /* Border Radius */
-  --radius-card: 1rem;
-  --radius-button: 0.5rem;
-  
+  --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  /* Radii */
+  --radius-panel: 28px;
+  --radius-card: 20px;
+
   /* Shadows */
-  --shadow-glow-blue: 0 0 50px rgba(59, 130, 246, 0.3);
-  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 20px 60px rgba(59, 130, 246, 0.2);
+  --shadow-card: 0 10px 30px rgba(20, 20, 20, 0.06);
+  --shadow-card-hover: 0 18px 40px rgba(20, 20, 20, 0.10);
 }
 
 @layer components {
   .section-container {
-    @apply max-w-7xl mx-auto px-6 md:px-12;
+    @apply max-w-[1240px] mx-auto px-5 sm:px-8 md:px-10;
   }
 
-  .glass-card {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-[--radius-card];
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 bg-ink text-white text-sm font-bold px-6 py-3.5 rounded-full transition-all duration-200 hover:bg-ink-soft hover:-translate-y-0.5;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-blue-400 via-indigo-500 to-violet-500 bg-clip-text text-transparent;
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-line text-ink text-sm font-bold px-6 py-3.5 rounded-full transition-all duration-200 hover:border-ink hover:-translate-y-0.5;
   }
 
-  .gradient-bg {
-    @apply bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900;
+  .panel {
+    @apply bg-panel rounded-panel;
   }
 
-  .btn-primary {
-    @apply px-6 py-3 bg-blue-500 rounded-[--radius-button] font-semibold text-white transition-all duration-300 hover:bg-blue-600 hover:scale-105 hover:shadow-[--shadow-glow-blue];
+  .card-surface {
+    @apply bg-surface rounded-card transition-all duration-200;
   }
 
-  .btn-secondary {
-    @apply px-6 py-3 border-2 border-slate-700 rounded-[--radius-button] font-semibold text-white transition-all duration-300 hover:bg-slate-800 hover:border-slate-600;
+  .card-hover {
+    @apply hover:-translate-y-1 hover:shadow-[--shadow-card-hover];
   }
-}
 
-@utility glow-blue {
-  box-shadow: var(--shadow-glow-blue);
+  .tag-teal {
+    @apply bg-teal-tint text-teal-dark text-[11px] font-bold tracking-wide px-3 py-1.5 rounded-full;
+  }
+
+  .tag-neutral {
+    @apply bg-tag text-muted text-[11px] font-bold tracking-wide px-3 py-1.5 rounded-full;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-bold tracking-[0.08em] uppercase text-faint;
+  }
+
+  .markdown-body {
+    @apply text-[17px] leading-relaxed text-ink-soft;
+  }
+
+  .markdown-body > * + * {
+    @apply mt-5;
+  }
+
+  .markdown-body h1,
+  .markdown-body h2,
+  .markdown-body h3,
+  .markdown-body h4 {
+    @apply font-extrabold tracking-tight text-ink mt-10 mb-2;
+  }
+
+  .markdown-body h1 {
+    @apply text-3xl;
+  }
+
+  .markdown-body h2 {
+    @apply text-2xl;
+  }
+
+  .markdown-body h3 {
+    @apply text-xl;
+  }
+
+  .markdown-body p {
+    @apply text-[17px];
+  }
+
+  .markdown-body a {
+    @apply text-teal-dark font-semibold underline underline-offset-2;
+  }
+
+  .markdown-body ul {
+    @apply list-disc pl-6 space-y-2;
+  }
+
+  .markdown-body ol {
+    @apply list-decimal pl-6 space-y-2;
+  }
+
+  .markdown-body blockquote {
+    @apply border-l-2 border-teal pl-4 text-muted italic;
+  }
+
+  .markdown-body img {
+    @apply rounded-card w-full;
+  }
+
+  .markdown-body hr {
+    @apply border-line;
+  }
+
+  .markdown-body code {
+    @apply bg-tag text-ink px-1.5 py-0.5 rounded-md text-[0.9em];
+  }
+
+  .markdown-body pre {
+    @apply bg-tag rounded-card p-5 overflow-x-auto text-[15px];
+  }
+
+  .markdown-body pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .markdown-body table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .markdown-body th,
+  .markdown-body td {
+    @apply border border-line px-3 py-2 text-left;
+  }
+
+  .markdown-body th {
+    @apply bg-tag font-bold;
+  }
 }
 
 @utility card-shadow {

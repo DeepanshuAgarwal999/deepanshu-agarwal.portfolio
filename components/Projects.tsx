@@ -1,186 +1,230 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { motion, useInView } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { Smartphone, ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const projects = [
+gsap.registerPlugin(ScrollTrigger);
+
+interface Project {
+  title: string;
+  image: string;
+  year: string;
+  tagPrimary: string;
+  tagSecondary: string;
+  link: string;
+}
+
+const featured: Project = {
+  title: 'Future Sportler CRM',
+  image: '/images/fs.png',
+  year: '2025',
+  tagPrimary: 'FULL STACK',
+  tagSecondary: 'NODE.JS',
+  link: 'https://www.futuresportler.com',
+};
+
+const projects: Project[] = [
   {
-    title: 'Future Sportler CRM',
-    description: 'Complete CRM system with role-based access for Admin, Staff, and Users',
-    longDescription: 'Built a complete CRM system with role-based access for Admin, Staff, and Users. Developed scalable backend using Node.js/NestJS and implemented Redis for caching and performance optimization. Integrated Easebuzz payment gateway for secure online payments. Designed responsive admin panel with dashboards, analytics, and management tools.',
-    image: '/images/fs.png',
-    tags: ['React', 'Next.js', 'Node.js', 'NestJS', 'Redis', 'MongoDB', 'Easebuzz', 'TypeScript'],
-    category: 'Full Stack',
-    link: 'https://www.futuresportler.com'
-  },
-  {
-    title: 'Clarity Mentor Platform',
-    description: 'Student-mentor platform with WebSocket real-time chat and Razorpay payment integration',
-    longDescription: 'Developed a comprehensive student-mentor platform using Next.js with both website and admin panel. Implemented WebSocket for real-time chat communication between students and mentors. Integrated Razorpay for secure payment transactions. Built responsive UI with dynamic dashboards for student and mentor management.',
+    title: 'Clarity Mentor',
     image: '/images/clarity-mentor.png',
-    tags: ['Next.js', 'WebSocket', 'Razorpay', 'TypeScript', 'Real-time Chat', 'Admin Panel'],
-    category: 'EdTech/SaaS',
-    link: 'https://claritymentor.vercel.app/'
+    year: '2024',
+    tagPrimary: 'UI DESIGN',
+    tagSecondary: 'REAL-TIME CHAT',
+    link: 'https://claritymentor.io/',
   },
   {
-    title: 'Aligner360 Dentist Website',
-    description: 'Full-featured dentist website with dynamic content management and SEO optimization',
-    longDescription: 'Developed a comprehensive website for Aligner360 dentist clinic with a powerful admin panel. Built full-stack solution allowing dentists to dynamically update website content, upload images and videos, and manage daily blogs. Implemented advanced SEO optimization for better search visibility. Created from scratch with modern architecture for scalability and performance.',
+    title: 'Aligner360',
     image: '/images/aligner360.png',
-    tags: ['Next.js', 'React', 'Node.js', 'TypeScript', 'SEO Optimization', 'Admin Panel', 'CMS'],
-    category: 'Full Stack',
-    link: 'https://www.aligner360.in/'
+    year: '2024',
+    tagPrimary: 'WEB DEV',
+    tagSecondary: 'CMS',
+    link: 'https://www.aligner360.in/',
   },
   {
-    title: 'Executive Headlines News Website',
-    description: 'Responsive news website with real-time updates and multimedia content',
-    longDescription: 'Built a news aggregator website with real-time updates, multimedia content, blogs, magazines and social sharing features using React, Next.js, and Tailwind CSS.',
-    image: '/images/news-site.png',
-    tags: ['React', 'Next.js', 'Tailwind CSS', 'SSR'],
-    category: 'Digital Marketing',
-    link: 'https://www.executiveheadlines.com'
-  },
-  {
-    title: 'LIFTU | KODIVA Interview Platform',
-    description: 'AI-based interview platform with candidate shortlisting and REST APIs',
-    longDescription: 'Developed scalable REST APIs using Node.js and Express. Built dynamic and responsive admin dashboard using React, Next.js, and TypeScript. Contributed to AI-based interview platform and implemented AI-powered candidate shortlisting, reducing recruiter workload by 70%.',
+    title: 'Kodiva Interviews',
     image: '/images/kodiva.png',
-    tags: ['React', 'Next.js', 'Node.js', 'Express', 'TypeScript', 'AI'],
-    category: 'AI/SaaS',
-    link: 'https://www.kodiva.ai'
+    year: '2024',
+    tagPrimary: 'AI/ML',
+    tagSecondary: 'WEB DEV',
+    link: 'https://www.kodiva.ai',
   },
   {
-    title: 'KRUNK.AI Chatbot Platform',
-    description: 'Fully customizable AI chatbot platform with Firebase backend',
-    longDescription: 'Built a fully customizable AI chatbot platform using React and TypeScript. Developed backend using Firebase for authentication and data storage. Created interactive UI with Framer Motion animations and delivered the entire product from scratch for organizations.',
+    title: 'Krunk.AI Chatbot',
     image: '/images/krunk.png',
-    tags: ['React', 'TypeScript', 'Firebase', 'Framer Motion', 'AI'],
-    category: 'AI/SaaS',
-    link: 'https://www.krunk.ai'
+    year: '2024',
+    tagPrimary: 'AI/ML',
+    tagSecondary: 'FIREBASE',
+    link: 'https://www.krunk.ai',
   },
- 
- 
+  {
+    title: 'Retreats of India',
+    image: '/images/retreats-of-india.png',
+    year: '2026',
+    tagPrimary: 'WEB DEV',
+    tagSecondary: 'NEXT.JS',
+    link: 'https://retreatsofindia.com/',
+  },
+  {
+    title: 'Executive Headlines',
+    image: '/images/news-site.png',
+    year: '2024',
+    tagPrimary: 'WEB DEV',
+    tagSecondary: 'SSR',
+    link: 'https://www.executiveheadlines.com',
+  },
 ];
+
+const mobileApps = [
+  {
+    name: 'Future Sportler',
+    url: 'https://play.google.com/store/apps/details?id=com.future_sportler',
+  },
+  {
+    name: 'Partner App - Future Sportler',
+    url: 'https://play.google.com/store/apps/details?id=com.partner_app_future_sportler',
+  },
+];
+
+function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
+  return (
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card-surface card-hover card-shadow p-3.5 flex flex-col gap-3.5"
+    >
+      <div className="rounded-xl overflow-hidden relative aspect-video bg-line">
+        <Image
+          src={project.image}
+          alt={`${project.title} preview`}
+          fill
+          priority={priority}
+          className="object-cover"
+        />
+      </div>
+      <div className="px-2 pb-2.5">
+        <div className="flex items-center gap-3 mb-2.5">
+          <span className="eyebrow">{project.title}</span>
+          <span className="text-xs text-[#B8B7BC]">{project.year}</span>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <span className="tag-teal">{project.tagPrimary}</span>
+          <span className="tag-neutral">{project.tagSecondary}</span>
+        </div>
+      </div>
+    </a>
+  );
+}
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const router = useRouter()
+  const gridRef = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 1024px)', () => {
+      const trigger = ScrollTrigger.create({
+        trigger: gridRef.current,
+        start: 'top 96px',
+        end: 'bottom bottom',
+        pin: pinRef.current,
+        pinSpacing: false,
+      });
+      return () => trigger.kill();
+    });
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <section id="projects" ref={ref} className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-slate-950" />
-
-      <div className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Featured <span className="gradient-text">Projects</span>
+    <section id="projects" ref={ref} className="section-container pt-22">
+      <div ref={gridRef} className="grid lg:grid-cols-[1fr_2fr] gap-8 items-start">
+        <div ref={pinRef}>
+          <h2 className="text-3xl sm:text-4xl font-extrabold leading-[1.08] tracking-tight mb-6">
+            Selected
+            <br />
+            work
           </h2>
-          <p className="text-xl text-text-gray max-w-2xl mx-auto">
-            A showcase of my recent work and creative solutions
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              onHoverStart={() => setHoveredIndex(index)}
-              onHoverEnd={() => setHoveredIndex(null)}
-              className="group relative glass-card overflow-hidden cursor-pointer"
-            >
-              {/* Image Container with Zoom Effect */}
-              <div className="relative h-64 overflow-hidden">
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  animate={{
-                    scale: hoveredIndex === index ? 1.1 : 1
-                  }}
-                  transition={{ duration: 0.4 }}
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
-
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500/90 backdrop-blur-sm rounded-full text-xs font-medium text-white">
-                  {project.category}
-                </div>
-
-                {/* Hover Overlay with Actions */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                  className="absolute inset-0 bg-blue-500/10 backdrop-blur-sm flex items-center justify-center gap-4"
-                >
-                  <motion.button
-                    onClick={() => { router.push(project.link) }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                  </motion.button>
-                  {/* <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors"
-                  >
-                    <Github className="w-5 h-5" />
-                  </motion.button>
-                  */}
-                </motion.div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-bold text-white group-hover:gradient-text transition-all">
-                    {project.title}
-                  </h3>
-                  <ArrowUpRight className="w-5 h-5 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-
-                <p className="text-text-gray text-sm mb-4 leading-relaxed">
-                  {hoveredIndex === index ? project.longDescription : project.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 text-xs bg-slate-800 border border-slate-700 rounded-full text-text-muted group-hover:border-blue-500/50 group-hover:text-blue-400 transition-all"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Bottom Glow Effect */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500"
-              />
-            </motion.div>
-          ))}
+          <a
+            href="https://github.com/DeepanshuAgarwal999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-dark"
+          >
+            See All
+          </a>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col gap-5"
+        >
+          <a
+            href={featured.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card-surface card-hover card-shadow p-3.5 flex flex-col gap-4"
+          >
+            <div className="rounded-2xl overflow-hidden relative aspect-[16/7.6] bg-line">
+              <Image
+                src={featured.image}
+                alt={`${featured.title} dashboard`}
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+            <div className="px-2.5 pb-3 flex items-center justify-between flex-wrap gap-2.5">
+              <div className="flex items-center gap-4">
+                <span className="eyebrow">{featured.title}</span>
+                <span className="text-xs text-[#B8B7BC]">{featured.year}</span>
+              </div>
+              <div className="flex gap-2">
+                <span className="tag-teal">{featured.tagPrimary}</span>
+                <span className="tag-neutral">{featured.tagSecondary}</span>
+              </div>
+            </div>
+          </a>
+
+          <div className="card-surface card-shadow p-5 sm:p-6">
+            <div className="eyebrow mb-3.5">Also shipped as React Native apps</div>
+            <div className="grid sm:grid-cols-2 gap-3.5">
+              {mobileApps.map((app) => (
+                <a
+                  key={app.name}
+                  href={app.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl border border-line hover:border-teal transition-colors"
+                >
+                  <span className="w-10 h-10 rounded-full bg-teal-tint flex items-center justify-center text-teal-dark shrink-0">
+                    <Smartphone className="w-4.5 h-4.5" strokeWidth={1.6} />
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold truncate">{app.name}</div>
+                    <span className="tag-teal inline-block mt-1.5">REACT NATIVE</span>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-faint shrink-0" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            {projects.map((project) => (
+              <ProjectCard key={project.title} project={project} />
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

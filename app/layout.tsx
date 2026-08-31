@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Portfolio | Web Developer & UI Designer",
-  description: "Creative web developer and UI designer crafting beautiful 3D web experiences with modern technologies",
+  title: "Deepanshu Agarwal | Full Stack Developer",
+  description:
+    "Full Stack Developer with 1.6 years of experience building scalable products with React, Next.js, Node.js, NestJS and modern web technologies.",
 };
 
 export default function RootLayout({
@@ -24,11 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

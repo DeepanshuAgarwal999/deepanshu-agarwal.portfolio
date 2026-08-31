@@ -1,202 +1,100 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { Mail, MapPin, Send, Github, Linkedin } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { Check } from 'lucide-react';
 import { useForm } from '@formspree/react';
 
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_CODE as string || ''); // Replace with your Formspree ID
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_CODE as string || '');
+  const [showToast, setShowToast] = useState(false);
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      await handleSubmit(e);
-      if (state.succeeded) {
-        setHasSubmitted(true);
-        // Reset after 3 seconds
-        setTimeout(() => {
-          setHasSubmitted(false);
-        }, 3000);
-      }
-    } catch (error) {
-      console.log('Form submission error:', error);
-    }
-  };
+  useEffect(() => {
+    if (!state.succeeded) return;
+    formRef.current?.reset();
+    setShowToast(true);
+    const timer = setTimeout(() => setShowToast(false), 4000);
+    return () => clearTimeout(timer);
+  }, [state.succeeded]);
 
   return (
-    <section id="contact" ref={ref} className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 gradient-bg" />
-
-      <div className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Let's <span className="gradient-text">Connect</span>
+    <section id="contact" ref={ref} className="section-container pt-22">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="panel p-2.5 sm:p-3"
+      >
+        <div className="rounded-[22px] p-7 sm:p-10 lg:p-14 bg-linear-to-br from-white to-lavender">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 max-w-140">
+            Let&rsquo;s build your next product together
           </h2>
-          <p className="text-xl text-text-gray max-w-2xl mx-auto">
-            Have a project in mind? Let's discuss how we can work together
+          <p className="text-[15px] text-[#5C5A6E] max-w-120 mb-8">
+            Feel free to reach out with any questions &mdash; I&rsquo;m available for freelance
+            work and full-time opportunities.
           </p>
-        </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card p-8"
-          >
-            {hasSubmitted ? (
-              <div className="flex items-center justify-center h-64">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center"
-                >
-                  <div className="w-16 h-16 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Message Sent!</h3>
-                  <p className="text-text-muted">Thanks for reaching out. I'll get back to you soon.</p>
-                </motion.div>
-              </div>
-            ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    disabled={state.submitting}
-                    className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-white disabled:opacity-50"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    disabled={state.submitting}
-                    className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-white disabled:opacity-50"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    disabled={state.submitting}
-                    rows={5}
-                    className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors resize-none text-white disabled:opacity-50"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={state.submitting}
-                  className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send className="w-5 h-5" />
-                  {state.submitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
-            )}
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-8"
-          >
-            {/* Contact Details */}
-            <div className="glass-card p-8 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Email</h3>
-                  <p className="text-text-gray">deepanshuagarwal9999@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Location</h3>
-                  <p className="text-text-gray">Uttar Pradesh, India</p>
-                </div>
-              </div>
+          <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-3.5 max-w-160">
+            <div className="grid sm:grid-cols-2 gap-3.5">
+              <input
+                type="text"
+                name="name"
+                required
+                disabled={state.submitting}
+                placeholder="Name"
+                className="w-full px-4.5 py-4 rounded-2xl border-0 bg-white/65 text-sm text-ink placeholder-faint focus:outline-none focus:ring-2 focus:ring-teal disabled:opacity-50"
+              />
+              <input
+                type="email"
+                name="email"
+                required
+                disabled={state.submitting}
+                placeholder="Email"
+                className="w-full px-4.5 py-4 rounded-2xl border-0 bg-white/65 text-sm text-ink placeholder-faint focus:outline-none focus:ring-2 focus:ring-teal disabled:opacity-50"
+              />
             </div>
-
-            {/* Social Links */}
-            <div className="glass-card p-8">
-              <h3 className="text-xl font-bold mb-4">Follow me on social media</h3>
-              <div className="flex gap-4">
-                <a
-                  href="https://github.com/DeepanshuAgarwal999"
-                  className="w-12 h-12 bg-slate-800 hover:bg-gradient-to-br hover:from-blue-500 hover:to-indigo-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/deepanshuagarwal999/"
-                  className="w-12 h-12 bg-slate-800 hover:bg-gradient-to-br hover:from-blue-500 hover:to-indigo-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                {/* <a
-                  href="#"
-                  className="w-12 h-12 bg-slate-800 hover:bg-gradient-to-br hover:from-blue-500 hover:to-indigo-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a> */}
-              </div>
-            </div>
-
-            {/* Availability Badge */}
-            <div className="glass-card p-6 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border-blue-500/20">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                <span className="font-semibold text-lg">Available for freelance work</span>
-              </div>
-              <p className="text-sm text-text-gray">
-                Open to exciting new projects and collaborations
-              </p>
-            </div>
-          </motion.div>
+            <textarea
+              name="message"
+              required
+              disabled={state.submitting}
+              rows={4}
+              placeholder="Work Description..."
+              className="w-full px-4.5 py-4 rounded-2xl border-0 bg-white/50 text-sm text-ink placeholder-faint resize-y focus:outline-none focus:ring-2 focus:ring-teal disabled:opacity-50"
+            />
+            <button
+              type="submit"
+              disabled={state.submitting}
+              className="w-full py-4.5 rounded-2xl bg-ink text-white text-[15px] font-bold hover:bg-ink-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {state.submitting ? 'Sending...' : 'Submit'}
+            </button>
+          </form>
         </div>
-      </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 16, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ duration: 0.25 }}
+            role="status"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-60 flex items-center gap-3 bg-ink text-white rounded-2xl pl-3.5 pr-5 py-3.5 shadow-2xl max-w-[calc(100vw-2rem)]"
+          >
+            <span className="w-8 h-8 rounded-full bg-teal flex items-center justify-center shrink-0">
+              <Check className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+            </span>
+            <div className="text-sm">
+              <div className="font-bold">Query submitted</div>
+              <div className="text-white/70">I&rsquo;ll get back to you soon.</div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

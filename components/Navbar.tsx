@@ -1,98 +1,98 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Contact', href: '#contact' }
+  { name: 'Work', href: '/#projects' },
+  { name: 'Services', href: '/#services' },
+  { name: 'Experience', href: '/#experience' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contact', href: '/#contact' },
 ];
 
+const BOOK_A_CALL_URL =
+  'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1OSbpKV4SsoI-WsXAhRwa-THKiXwS7BsbCBeThZ7D1oo3hBvReFK7kb2p7mEKgTn94HKWJrVnr';
+
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-900/90 backdrop-blur-lg shadow-lg' : 'bg-transparent'
-        }`}
-    >
-      <div className="section-container">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <motion.a
-            href="tel:+919999999999"
-            className="text-xl md:text-2xl font-bold flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
+    <header className="sticky top-0 z-50 bg-surface border-b border-line">
+      <div className="section-container flex items-center justify-between gap-4 h-17">
+        <a href="/" className="flex items-center gap-2.5">
+          <span className="w-8.5 h-8.5 rounded-full bg-ink text-white flex items-center justify-center font-extrabold text-sm">
+            D
+          </span>
+          <span className="font-extrabold text-sm tracking-wide uppercase hidden sm:inline">
+            Deepanshu Agarwal
+          </span>
+        </a>
+
+        <nav className="hidden md:flex items-center gap-7">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-sm font-semibold text-ink-soft hover:text-teal-dark transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <a
+            href={BOOK_A_CALL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-dark hidden sm:inline-flex"
           >
-            <Phone className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
-            <span className="gradient-text">+91 8076821409</span>
-          </motion.a>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-text-gray hover:text-white transition-colors text-sm font-medium"
-              >
-                {link.name}
-              </a>
-            ))}
-            <Link href={'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1OSbpKV4SsoI-WsXAhRwa-THKiXwS7BsbCBeThZ7D1oo3hBvReFK7kb2p7mEKgTn94HKWJrVnr'} className="btn-primary text-sm">
-              Hire Me
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
+            Book a Call
+          </a>
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className="md:hidden text-ink"
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
+      <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden py-4 border-t border-white/10"
+            className="md:hidden overflow-hidden border-t border-line"
           >
-            {navLinks.map((link) => (
+            <div className="section-container py-4 flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="py-2.5 text-sm font-semibold text-ink-soft"
+                >
+                  {link.name}
+                </a>
+              ))}
               <a
-                key={link.name}
-                href={link.href}
+                href={BOOK_A_CALL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-3 text-text-gray hover:text-white transition-colors"
+                className="btn-dark w-full mt-2"
               >
-                {link.name}
+                Book a Call
               </a>
-            ))}
-            <button className="btn-primary w-full mt-4">
-              Hire Me
-            </button>
+            </div>
           </motion.div>
         )}
-      </div>
-    </motion.nav>
+      </AnimatePresence>
+    </header>
   );
 }

@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Deepanshu Agarwal | Full Stack Developer & AI Enthusiast',
-  description: 'Full Stack Developer with 3+ years of experience in backend and frontend development. Proficient in React.js, Next.js, NestJS, Spring Boot, Java, Docker, AWS, Node.js, MongoDB, PostgreSQL, AI/ML, LLMs, and modern web technologies. 10+ internships completed with freelance experience.',
+  description: 'Full Stack Developer with 1.6 years of experience in backend and frontend development. Proficient in React.js, Next.js, NestJS, Spring Boot, Java, Docker, AWS, Node.js, MongoDB, PostgreSQL, AI/ML, LLMs, and modern web technologies. 10+ internships completed with freelance experience.',
   keywords: [
     'Full Stack Developer',
     'React.js',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: 'https://deepanshuagarwal.dev',
     siteName: 'Deepanshu Agarwal Portfolio',
     title: 'Deepanshu Agarwal | Full Stack Developer & AI Enthusiast',
-    description: 'Full Stack Developer with 3+ years of experience in backend and frontend development. Also experienced in AI/ML and LLM integration.',
+    description: 'Full Stack Developer with 1.6 years of experience in backend and frontend development. Also experienced in AI/ML and LLM integration.',
   },
 };
 
@@ -52,11 +52,11 @@ export default function Home() {
       <main className="relative">
         <Hero />
         <About />
-        <Experience />
         <Projects />
+        <Experience />
         <Skills />
         <Contact />
-        {/* <Footer /> */}
+        <Footer />
       </main>
       <Chatbot />
     </>

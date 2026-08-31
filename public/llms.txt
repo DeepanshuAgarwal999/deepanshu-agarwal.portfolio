@@ -1,0 +1,15 @@
+# Deepanshu Agarwal
+
+> Full-stack developer building production web and mobile products with
+> React, Next.js, Node.js, NestJS and MongoDB. Portfolio and technical blog.
+
+## Pages
+
+- [Portfolio](https://deepanshuagarwal.dev/): projects, experience, and contact information.
+- [Blog](https://deepanshuagarwal.dev/blog): technical writing on full-stack development.
+
+## Contact
+
+- Email: deepanshuagarwal9999@gmail.com
+- LinkedIn: https://www.linkedin.com/in/deepanshuagarwal999/
+- GitHub: https://github.com/DeepanshuAgarwal999
